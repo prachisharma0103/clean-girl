@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clean Girl</title>
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fdf8f5;
+      --bg2: #faf3ee;
+      --pink: #e8a0a0;
+      --pink2: #d4697a;
+      --pink3: #f5c5c5;
+      --rose: #c2566b;
+      --text: #2a1a1a;
+      --muted: #9a7a7a;
+      --card: #ffffff;
+      --border: rgba(212,105,122,0.15);
+      --cream: #fef9f5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND ── */
+    .bg-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bg-fixed::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 90% 10%, rgba(232,160,160,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(245,197,197,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,240,240,0.2) 0%, transparent 60%);
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      animation: blobFloat ease-in-out infinite alternate;
+    }
+    .blob1 { width: 450px; height: 450px; background: rgba(232,160,160,0.12); top: -100px; right: -100px; animation-duration: 14s; }
+    .blob2 { width: 350px; height: 350px; background: rgba(245,197,197,0.15); bottom: 10%; left: -80px; animation-duration: 18s; }
+    .blob3 { width: 250px; height: 250px; background: rgba(212,105,122,0.08); top: 40%; right: 20%; animation-duration: 11s; }
+    @keyframes blobFloat {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(20px,-25px) scale(1.06); }
+    }
+
+    /* Petal decorations */
+    .petal {
+      position: absolute;
+      width: 8px; height: 12px;
+      background: rgba(212,105,122,0.12);
+      border-radius: 50% 0 50% 0;
+      animation: petalFall linear infinite;
+    }
+    .petal:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+    .petal:nth-child(2) { left: 25%; animation-duration: 15s; animation-delay: 3s; width: 6px; height: 9px; }
+    .petal:nth-child(3) { left: 60%; animation-duration: 11s; animation-delay: 6s; }
+    .petal:nth-child(4) { left: 80%; animation-duration: 14s; animation-delay: 1s; width: 5px; height: 8px; }
+    .petal:nth-child(5) { left: 45%; animation-duration: 13s; animation-delay: 8s; }
+    @keyframes petalFall {
+      0%   { top: -20px; opacity: 0; transform: rotate(0deg) translateX(0); }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.5; }
+      100% { top: 110vh; opacity: 0; transform: rotate(360deg) translateX(40px); }
+    }
+
+    /* ── LAYOUT ── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 28px 100px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--rose);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--rose); }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 60px 0 80px;
+      animation: fadeUp 1s ease both;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 24px;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--pink2);
+      opacity: 0.4;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 700;
+      line-height: 0.95;
+      color: var(--text);
+      letter-spacing: -2px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--rose);
+    }
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+    }
+    .sale-banner {
+      display: inline-block;
+      margin-top: 32px;
+      background: linear-gradient(135deg, var(--pink2), var(--rose));
+      color: white;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(194,86,107,0.3);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 8px 24px rgba(194,86,107,0.3); }
+      50% { box-shadow: 0 8px 36px rgba(194,86,107,0.5); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .divider span { color: var(--pink); font-size: 1rem; }
+
+    /* ── SECTION HEADER ── */
+    .sec-head {
+      margin-bottom: 32px;
+    }
+    .sec-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--rose);
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    .sec-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 20px;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--pink3), var(--pink2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s;
+    }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(194,86,107,0.12); border-color: rgba(212,105,122,0.3); }
+    .product-card:hover::before { transform: scaleX(1); }
+    .product-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .product-price {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--rose);
+      background: rgba(194,86,107,0.08);
+      border: 1px solid rgba(194,86,107,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 6px;
+    }
+
+    /* ── SALE TABLE ── */
+    .table-wrap {
+      background: linear-gradient(135deg, rgba(232,160,160,0.1), rgba(245,197,197,0.08));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: linear-gradient(135deg, rgba(194,86,107,0.12), rgba(232,160,160,0.1));
+      color: var(--rose);
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 18px 28px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 20px 28px;
+      font-size: 14px;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+    }
+    tr:hover td { background: rgba(232,160,160,0.05); }
+
+    /* ── DETAILS ── */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    details {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    details[open] { border-color: rgba(194,86,107,0.35); box-shadow: 0 8px 24px rgba(194,86,107,0.08); }
+    summary {
+      padding: 18px 20px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: var(--rose);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-transform: uppercase;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; font-size: 1.2rem; font-weight: 300; transition: transform 0.3s; }
+    details[open] summary::after { transform: rotate(45deg); }
+    details p {
+      padding: 0 20px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── NEWSLETTER ── */
+    .newsletter-box {
+      background: linear-gradient(135deg, var(--pink2), var(--rose));
+      border-radius: 24px;
+      padding: 56px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .newsletter-box::before {
+      content: '✿';
+      position: absolute;
+      font-size: 200px;
+      opacity: 0.05;
+      top: -40px;
+      right: -20px;
+      color: white;
+      pointer-events: none;
+    }
+    .newsletter-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .newsletter-box p { color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 32px; }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      backdrop-filter: blur(4px);
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.6); }
+    .newsletter-form button {
+      padding: 16px 28px;
+      background: white;
+      color: var(--rose);
+      border: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+    .newsletter-form button:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-card:hover { border-color: rgba(194,86,107,0.35); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(194,86,107,0.1); }
+    .contact-card .icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .contact-card .clabel { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--rose); opacity: 0.8; margin-bottom: 8px; }
+    .contact-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── CART BUTTON ── */
+    .cart-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--pink2), var(--rose));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(194,86,107,0.3);
+      margin-top: 24px;
+    }
+    .cart-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(194,86,107,0.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .product-grid { grid-template-columns: 1fr 1fr; }
+      .details-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .newsletter-form { flex-direction: column; }
+      nav { flex-direction: column; gap: 16px; }
+    }
+    @media (max-width: 420px) {
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-fixed">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Clean Girl ✿</div>
+  <div class="nav-links">
+    <a href="#">Clothing</a>
+    <a href="#">Footwear</a>
+    <a href="#">Accessories</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">✿ New Collection 2026 ✿</div>
+    <h1>Clean<br><em>Girl.</em></h1>
+    <p class="hero-sub">Welcome to Clean Girl shopping area. Hope you'll enjoy our service — your comfort and style is our priority. 💗</p>
+    <div class="sale-banner">🔥 Top Sale — Upto 40% Off Everything!</div>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- CLOTHING -->
+  <div class="sec-head">
+    <p class="sec-label">Category 01</p>
+    <h2>👗 Clothing</h2>
+  </div>
+  <div class="product-grid">
+    <div class="product-card"><h3>Shorts</h3><span class="product-price">Starting ₹300</span></div>
+    <div class="product-card"><h3>Dresses</h3><span class="product-price">Starting ₹800</span></div>
+    <div class="product-card"><h3>Tops</h3><span class="product-price">Starting ₹300</span></div>
+    <div class="product-card"><h3>Jeans</h3><span class="product-price">Starting ₹900</span></div>
+    <div class="product-card"><h3>Party Wear</h3><span class="product-price">Starting ₹1000</span></div>
+    <div class="product-card"><h3>Short Kurtis</h3><span class="product-price">Starting ₹400</span></div>
+    <div class="product-card"><h3>Bralet</h3><span class="product-price">Starting ₹350</span></div>
+    <div class="product-card"><h3>T-Shirts</h3><span class="product-price">Starting ₹300</span></div>
+    <div class="product-card"><h3>Shirts</h3><span class="product-price">Starting ₹350</span></div>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- FOOTWEAR -->
+  <div class="sec-head">
+    <p class="sec-label">Category 02</p>
+    <h2>👟 Footwear</h2>
+  </div>
+  <div class="product-grid">
+    <div class="product-card"><h3>Shoes</h3><span class="product-price">Starting ₹600</span></div>
+    <div class="product-card"><h3>Flatwear</h3><span class="product-price">Starting ₹300</span></div>
+    <div class="product-card"><h3>Sandals</h3><span class="product-price">Starting ₹500</span></div>
+    <div class="product-card"><h3>Heels</h3><span class="product-price">Starting ₹700</span></div>
+    <div class="product-card"><h3>Sneakers</h3><span class="product-price">Starting ₹600</span></div>
+    <div class="product-card"><h3>Boots</h3><span class="product-price">Starting ₹300</span></div>
+    <div class="product-card"><h3>Loafers</h3><span class="product-price">Starting ₹500</span></div>
+    <div class="product-card"><h3>Traditional Wear</h3><span class="product-price">Starting ₹600</span></div>
+    <div class="product-card"><h3>Flip Flops</h3><span class="product-price">Starting ₹370</span></div>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- ACCESSORIES -->
+  <div class="sec-head">
+    <p class="sec-label">Category 03</p>
+    <h2>👜 Accessories</h2>
+  </div>
+  <div class="product-grid">
+    <div class="product-card"><h3>Hair Tie</h3><span class="product-price">Starting ₹50</span></div>
+    <div class="product-card"><h3>Clutchers</h3><span class="product-price">Starting ₹60</span></div>
+    <div class="product-card"><h3>Bandana</h3><span class="product-price">Starting ₹100</span></div>
+    <div class="product-card"><h3>Earrings</h3><span class="product-price">Starting ₹40</span></div>
+    <div class="product-card"><h3>Necklace</h3><span class="product-price">Starting ₹60</span></div>
+    <div class="product-card"><h3>Bangles</h3><span class="product-price">Starting ₹130</span></div>
+    <div class="product-card"><h3>Bracelet</h3><span class="product-price">Starting ₹50</span></div>
+    <div class="product-card"><h3>Hair Clips</h3><span class="product-price">Starting ₹30</span></div>
+    <div class="product-card"><h3>Watches</h3><span class="product-price">Starting ₹600</span></div>
+    <div class="product-card"><h3>Bags</h3><span class="product-price">Starting ₹600</span></div>
+  </div>
+
+  <div style="text-align:center">
+    <button class="cart-btn">🛍️ Add to Cart</button>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- SALE TABLE -->
+  <div class="sec-head">
+    <p class="sec-label">Limited Time</p>
+    <h2>🔥 Sale & Discounts</h2>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Sale Category</th>
+        <th>Discount</th>
+      </tr>
+      <tr>
+        <td>👗 Clothing, 👜 Accessories, 👟 Footwear</td>
+        <td><span style="color:var(--rose);font-weight:700">Upto 40% OFF</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- DELIVERY INFO -->
+  <div class="sec-head">
+    <p class="sec-label">Good to Know</p>
+    <h2>📦 Shopping Info</h2>
+  </div>
+  <div class="details-grid">
+    <details>
+      <summary>🚚 Delivery</summary>
+      <p>We deliver your products within 3–5 business days. Express delivery also available!</p>
+    </details>
+    <details>
+      <summary>↩️ Returns</summary>
+      <p>Easy returns and exchanges within 1 week of purchase. After that, no returns available.</p>
+    </details>
+    <details>
+      <summary>💳 Payment</summary>
+      <p>We accept Credit/Debit Cards, UPI, Online Payment and Cash on Delivery!</p>
+    </details>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter-box">
+    <h2>Stay in the Loop 💌</h2>
+    <p>Subscribe for the latest drops, exclusive deals and style inspo!</p>
+    <div class="newsletter-form">
+      <input type="text" placeholder="Your name">
+      <input type="email" placeholder="Your email">
+      <button>Subscribe ✿</button>
+    </div>
+  </div>
+
+  <div class="divider"><span>✿</span></div>
+
+  <!-- CONTACT -->
+  <div class="sec-head">
+    <p class="sec-label">Reach Us</p>
+    <h2>💌 Contact & Address</h2>
+  </div>
+  <div class="contact-grid">
+    <a href="mailto:abc@gmail.com" class="contact-card">
+      <span class="icon">✉️</span>
+      <p class="clabel">Email Us</p>
+      <p>abc@gmail.com</p>
+    </a>
+    <div class="contact-card">
+      <span class="icon">📍</span>
+      <p class="clabel">Visit Us</p>
+      <p>S T Depot, S T Road, Nalasopara West, Palghar - 401203, Maharashtra</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  ✿ Clean Girl — Nalasopara, Mumbai 2026 — Made with 💗 ✿
+</footer>
+
+</body>
+</html>
